@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
+import src.dfk as dfk
 
 app = FastAPI()
 
@@ -9,9 +10,9 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/dfk/getQuestCost")
-async def getQuestCost():
-    costs = {"cv_fishing": 8, "cv_foraging": 9, "cv_mining": 4}
+@app.get("/api/v1/quest-cost-breakeven")
+async def get_quest_cost_breakeven():
+    costs = await dfk.get_quest_cost_breakeven()
     return costs
 
 
