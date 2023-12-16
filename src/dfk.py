@@ -10,7 +10,7 @@ async def get_quest_cost_breakeven():
 
     # Get quest expected value
     cv_fishing_loots_prices = await get_loots_prices("avalanchedfk", cv_fishing)
-    cv_fishing_loots_ev = get_loots_expected_value(cv_fishing_loots_prices)
+    cv_fishing_loots_ev = get_loots_expected_value(cv_fishing_loots_prices, 5, 6) # 5 tries, 6 heroes
     cv_fishing_breakeven = get_breakeven_gwei(cv_fishing_loots_ev, jewel_usd, "fishing")
 
     response = {"cv_fishing": cv_fishing_breakeven}
@@ -24,12 +24,12 @@ def get_breakeven_gwei(loots_ev, jewel_usd, profession):
     return breakeven_gwei
 
 
-def get_loots_expected_value(data):
+def get_loots_expected_value(data, tries, num_heroes):
     total_ev = 0
     for item in data:
         ev = (item[2] / 100) * item[3]  # Multiply the chance of looting and price
         total_ev += ev
-    return total_ev * 5  # 5 tries
+    return total_ev * tries * num_heroes
 
 
 async def fetch(client, params):
